@@ -1,6 +1,6 @@
 # eduACDC - Educational Atmospheric Cluster Dynamics Code
 
-An educational Python implementation of the Atmospheric Cluster Dynamics Code (ACDC) for atmospheric outgrowth simulations.
+An educational Python implementation of the [Atmospheric Cluster Dynamics Code (ACDC)](https://github.com/tolenius/ACDC) for atmospheric outgrowth simulations. eduACDC reimplements the core kinetic model in Python for teaching and research. For specific details on the model, methodology, and citations, see the [original ACDC repository](https://github.com/tolenius/ACDC).
 
 ## Installation
 
