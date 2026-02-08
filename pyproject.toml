@@ -10,6 +10,7 @@ readme = "README.md"
 requires-python = ">=3.12"
 license = {text = "GPL-3.0"}
 
+
 dependencies = [
     "numpy>=1.21.0",
     "scipy>=1.7.0",
@@ -22,6 +23,10 @@ dependencies = [
     "networkx>=3.1",
     "seaborn>=0.13.2",
 ]
+
+[project.urls]
+repository = "https://github.com/edahelsinki/eduACDC"
+homepage = "https://github.com/edahelsinki/eduACDC"
 
 [tool.setuptools.packages.find]
 include = ["eduacdc*"]

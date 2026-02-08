@@ -1,0 +1,63 @@
+# eduacdc Package
+
+The `eduacdc` package provides an educational implementation of the Atmospheric Cluster Dynamics Code (ACDC) for atmospheric outgrowth simulations. It models molecular clustering, collision/evaporation kinetics, and external losses (coagulation sink, wall loss).
+
+---
+
+## eduacdc.core
+
+Core domain models and physics for cluster dynamics.
+
+| Module | Key Classes/Functions | Purpose |
+|--------|------------------------|---------|
+| **`molecules`** | `Molecule`, `MoleculeCollection`, `MoleculeType` | Molecular species definitions (name, symbol, charge, mass, density); supports neutral, ions, proton, missing proton |
+| **`clusters`** | `Cluster`, `ClusterCollection`, `ClusterType`, `GenericIon` | Cluster definitions with composition, charge, mass; collections with indexing and filtering |
+| **`cluster_properties`** | `ClusterProperties`, `EnergyData`, `compute_hydration_distribution` | Gibbs free energy, enthalpy, entropy; radius/diameter; hydrate distribution |
+| **`process_coefficients`** | `ProcessCoefficients`, `ProcessCoefficientsConfiguration` | Collision and evaporation coefficients; Su82/constant ion methods |
+| **`equations`** | `ClusterEquations`, `EquationsConfiguration`, `ProcessTracker` | SymPy-based ODE generation; collision/evaporation/boundary processes |
+| **`system`** | `SimulationSystem`, `AmbientConditions` | System assembly (molecules, clusters, conditions); temperature, RH, saturation vapor pressure |
+| **`coagulation_loss`** | `CoagulationLossCalculator`, `ExponentialCoagulationLoss`, `BackgroundCoagulationLoss`, `ConstantCoagulationLoss` | Size-dependent coagulation sink parameterizations |
+| **`wall_loss`** | `WallLossCalculator`, `DiffusionWallLoss`, `Cloud4JAWallLoss`, `Cloud4SimpleWallLoss`, `ConstantWallLoss`, `ExternalWallLoss` | Flow-tube and chamber wall loss models |
+
+---
+
+## eduacdc.analysis
+
+Analysis and visualization of ACDC systems and simulation results.
+
+| Module | Key Functions | Purpose |
+|--------|---------------|---------|
+| **`fluxes`** | `create_flux_graph`, `plot_flux_graph`, `plot_flux_tracking`, `plot_final_outflux`, `plot_net_fluxes_heatmap`, `get_significant_outflux_reactions` | Flux network graphs, outflux identification, heatmaps |
+| **`rates_and_deltags`** | `plot_reference_deltag_surface`, `plot_act_deltag_surface`, `plot_overall_evaporation_rate_surface`, `plot_monomer_collision_rate_ratio` | DeltaG surfaces, evaporation and collision rate plots |
+| **`visualization`** | `plot_concentrations`, `plot_total_concentrations`, `plot_cluster_size_distribution`, `plot_formation_rates`, `plot_final_concentrations` | Time series, bar charts, size distributions |
+
+---
+
+## eduacdc.io
+
+Input/output for ACDC configuration files.
+
+| Module | Key Classes | Purpose |
+|--------|-------------|---------|
+| **`parser`** | `InputParser` | `get_system_from_yaml(path)` → `SimulationSystem`; `get_equations_from_yaml(path, clusters)` → `ClusterEquations` |
+
+---
+
+## eduacdc.simulation
+
+Simulation execution and result storage.
+
+| Module | Key Classes | Purpose |
+|--------|-------------|---------|
+| **`solver`** | `Simulation` | ODE integration (`scipy.integrate`); parses initial conditions (constant/source/initial); applies coagulation and wall loss |
+| **`results`** | `SimulationResults` | Stores time, concentrations, coefficients, formation rates, outflux; provides `get_final_concentrations()`, total by charge type |
+
+---
+
+## eduacdc.utils
+
+Utility functions and constants.
+
+| Module | Key Exports | Purpose |
+|--------|-------------|---------|
+| **`constants`** | `ureg`, `BOLTZMANN_CONSTANT`, `PI`, `parse_quantity`, `format_quantity`, `conc` | Pint registry, physical constants, unit parsing, concentration context (ppt/ppb/ppm) |
