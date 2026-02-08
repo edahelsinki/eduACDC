@@ -1204,13 +1204,17 @@ class ClusterEquations:
         if self.process_tracker.boundary_processes:
             print("\nBoundary Processes:")
             for (i, j), _boundary_process in list(self.process_tracker.boundary_processes.items())[:max_terms]:
+                removed_str = " + ".join(
+                    f"{self.clusters[idx]} (x{count})"
+                    for idx, count in _boundary_process.removed_monomers.items()
+                )
                 if not _boundary_process.is_used:
                     print(
-                        f" Not using boundary collision: {self.clusters[i]} + {self.clusters[j]} -> {_boundary_process.product_label} -> {self.clusters[_boundary_process.boundary_cluster_idx]} + {self.clusters[_boundary_process.removed_mol_idx]} (x{_boundary_process.removed_mol_count})"
+                        f" Not using boundary collision: {self.clusters[i]} + {self.clusters[j]} -> {_boundary_process.product_label} -> {self.clusters[_boundary_process.boundary_cluster_idx]} + {removed_str}"
                     )
                 else:
                     print(
-                        f"  {self.clusters[i]} + {self.clusters[j]} -> {_boundary_process.product_label} -> {self.clusters[_boundary_process.boundary_cluster_idx]} + {self.clusters[_boundary_process.removed_mol_idx]} (x{_boundary_process.removed_mol_count})"
+                        f"  {self.clusters[i]} + {self.clusters[j]} -> {_boundary_process.product_label} -> {self.clusters[_boundary_process.boundary_cluster_idx]} + {removed_str}"
                     )
             if len(self.process_tracker.boundary_processes) > max_terms:
                 print(
