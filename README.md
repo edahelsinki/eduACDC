@@ -48,7 +48,7 @@ Run the example simulation:
 python examples/run_simulation.py
 ```
 
-See [examples/run_simulation.py](examples/run_simulation.py) for a minimal workflow: loading a YAML config, creating a `Simulation`, and running steady-state outgrowth. Explore the `examples/` directory for more YAML system configuration files.
+See [examples/run_simulation.py](examples/run_simulation.py) for a minimal workflow: loading a YAML config, creating a `Simulation`, and running steady-state outgrowth. Explore the `examples/` directory for more YAML system configuration files. For the YAML configuration format, see [eduacdc/README.md](eduacdc/README.md#yaml-configuration).
 
 ## Code Layout
 
@@ -98,7 +98,7 @@ See [examples/run_simulation.py](examples/run_simulation.py) for a minimal workf
 ## Project Structure
 
 - `eduacdc/` — Main package code
-- `examples/` — YAML system configuration files (ADW, ANW, AN_neutral_neg_pos, three_component_system)
+- `examples/` — YAML system configuration files ([ADW](examples/ADW.yaml), [ANW](examples/ANW.yaml), [AN_neutral_neg_pos](examples/AN_neutral_neg_pos.yaml), [three_component_system](examples/three_component_system.yaml)); see [examples/README.md](examples/README.md)
 
 ## Modules
 
