@@ -77,17 +77,16 @@ def plot_concentrations(
         cluster_indices = list(range(min(10, results.system.n_clusters)))
 
     color_palette = plt.get_cmap("tab20").colors
-    colors = [color_palette[i] for i in cluster_indices]
-    for i, cluster_index in enumerate(cluster_indices):
-        if i < results.system.n_clusters:
-            cluster = results.system.clusters[i]
-            conc = (results.concentrations[:, i] * ureg("m^-3")).to(output_units).magnitude
+    for cluster_index in cluster_indices:
+        if cluster_index < results.system.n_clusters:
+            cluster = results.system.clusters[cluster_index]
+            conc = (results.concentrations[:, cluster_index] * ureg("m^-3")).to(output_units).magnitude
             non_zero = conc > 0
             ax.plot(
                 results.time[non_zero],
                 conc[non_zero],
                 label=f"{str(cluster)} ({cluster.type.value})",
-                color=colors[i],
+                color=color_palette[cluster_index % len(color_palette)],
             )
 
     if log_scale:
