@@ -42,6 +42,8 @@ uv run python examples/run_simulation.py
 
 ## Usage
 
+For a step-by-step introduction that assumes no Python experience, see the tutorial notebook [examples/tutorial.ipynb](examples/tutorial.ipynb) and its setup guide [examples/TUTORIAL_SETUP.md](examples/TUTORIAL_SETUP.md). The tutorial can be run in Google Colab without installing anything.
+
 Run the example simulation:
 
 ```bash
