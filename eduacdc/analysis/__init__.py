@@ -12,6 +12,7 @@ from .fluxes import (
     plot_flux_graph,
     plot_flux_tracking,
     plot_net_fluxes_heatmap,
+    track_fluxes,
 )
 from .rates_and_deltags import (
     plot_act_deltag_surface,
