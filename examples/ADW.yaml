@@ -18,10 +18,10 @@ molecules:
 clusters:
   specifications:
     neutral:
-      - A: [1, 4]  # Just SA clusters
-      - D: [1, 4]  # Just DMA clusters
-      - A: [1, 4]  # SA and DMA clusters
-        D: [1, 4] 
+      - A: [1, 3]  # Just SA clusters
+      - D: [1, 3]  # Just DMA clusters
+      - A: [1, 3]  # SA and DMA clusters
+        D: [1, 3]
   
 conditions:
     relative_humidity: 0.5
@@ -167,7 +167,7 @@ cluster_properties:
 
 equations_configuration:
     outgrowth_rules:
-      neutral: [{"A": 4, "D": 5}]  # Clusters with 5+ SA or 4+ DMA
+      neutral: [{"A": 2, "D": 2}]  # Clusters with 5+ SA or 4+ DMA
     options:
       disable_nonmonomers: false
       keep_useless_collisions: false
