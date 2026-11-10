@@ -73,11 +73,12 @@ class ProcessCoefficients:
         self,
         temperature: float,
         partial_pressure_water: float,
+        enhancements: Optional[dict] = None,
     ) -> None:
         """Build the complete reaction network."""
         # Calculate all coefficients
         self._collision_coefficients = self._calculate_effective_collision_coefficients(
-            temperature, partial_pressure_water
+            temperature, partial_pressure_water, enhancements,
         )
         # if evaporation is disabled, no need to calculate evaporation rates
         if self.configuration.disable_evaporations:
@@ -113,10 +114,12 @@ class ProcessCoefficients:
         self,
         temperature: float,
         partial_pressure_water: float,
+        enhancements: Optional[np.ndarray] = None,
     ) -> np.ndarray:
         """Calculate effective collision coefficients between all cluster pairs."""
         n_clusters = len(self.clusters)
         rates = np.zeros((n_clusters, n_clusters))
+
 
         for i, cluster_i in enumerate(self.clusters):
             for j, cluster_j in enumerate(self.clusters):
@@ -127,7 +130,9 @@ class ProcessCoefficients:
                         cluster_j,
                         temperature,
                         partial_pressure_water,
+                        enhancements,
                     )
+
                     rates[i, j] = rate
                     rates[j, i] = rate
         return rates
@@ -142,6 +147,7 @@ class ProcessCoefficients:
         c2_charge: int,
         temperature: float,
         hard_sphere_collision_rate: float,
+        enhancements: Optional[dict] = None,
     ) -> float:
         """Calculate the collision enhancement factor between two clusters using Su and Chesnavich, 1982
 
@@ -158,9 +164,23 @@ class ProcessCoefficients:
         Returns:
             float: collision enhancement factor
         """
-        # if both are neutral, return 1.0
+
+        # Hydrated clusters are removed from the normal collision calculation
+        # so they should have the same collision coefficients as the dry ones
+        # NOTE: this code assumed there are less than 10 waters in the cluster
+        if 'W' in c1_label:
+            c1_label = c1_label[:-2]
+
+        if 'W' in c2_label:
+            c2_label = c2_label[:-2]
+
+        # if enhancements dict is supplied, return the unique enhancement factor
+        # if not, return 1.0
         if c1_charge == 0 and c2_charge == 0:
-            return 1.0
+            if enhancements is None:
+                return 2.0
+            else:
+                return enhancements[c1_label][c2_label]
         # if the ion collision method is constant, return the constant ion enhancement factor
         if self.configuration.ion_collision_method == "constant":
             return CONSTANT_ION_ENHANCEMENT_FACTOR
@@ -195,6 +215,7 @@ class ProcessCoefficients:
         fcr /= hard_sphere_collision_rate
         if fcr < 1.0:
             fcr = 1.0
+
         return fcr
 
     def _hard_sphere_collision_rate(
@@ -224,6 +245,7 @@ class ProcessCoefficients:
         cluster_j: Cluster,
         temperature: float,
         partial_pressure_water: float,
+        enhancements: Optional[dict] = None,
     ) -> float:
         """Calculate effective collision rate between two clusters."""
 
@@ -263,6 +285,7 @@ class ProcessCoefficients:
                         cluster_j.charge,
                         temperature,
                         hard_sphere_collision_rate,
+                        enhancements,
                     )
                 self._hard_sphere_collision_coefficients[(label_i, label_j)] = (
                     hard_sphere_collision_rate

@@ -8,6 +8,7 @@ from dataclasses import dataclass
 from typing import Any, Dict, Optional, Set, Tuple
 
 import numpy as np
+from numba.cuda.cudadrv import ndarray
 
 from ..core.cluster_properties import ClusterProperties, EnergyData
 from ..core.clusters import ClusterCollection, GenericIon
@@ -29,16 +30,20 @@ class AmbientConditions:
     def from_config(cls, config: Dict[str, Any]) -> "AmbientConditions":
         """Create system conditions from a configuration."""
         if config.get("temperature") is not None:
-            temperature = parse_quantity(config["temperature"], default_unit="K", target_unit="K")
+            temperature = parse_quantity(config["temperature"],default_unit="K",target_unit="K",)
         else:
             raise ValueError("Temperature is required")
-        instance = cls(temperature=temperature)
-        if relative_humidity:=config.get("relative_humidity"):
-            if isinstance(relative_humidity, (float, int)):
-                instance.relative_humidity = relative_humidity
-            else:
-                raise ValueError(f"Relative humidity must be a number, got {type(relative_humidity)}: {relative_humidity}")
-        return instance
+
+        relative_humidity = config.get("relative_humidity",0.0,)
+
+        if not isinstance(relative_humidity, (float, int)):
+            raise ValueError(
+                "Relative humidity must be a number, "
+                f"got {type(relative_humidity)}: {relative_humidity}")
+
+        return cls(
+            temperature=temperature,
+            relative_humidity=float(relative_humidity),)
 
     @classmethod
     def from_cluster_properties(cls, cluster_properties: ClusterProperties) -> "AmbientConditions":
@@ -133,6 +138,7 @@ class SimulationSystem:
         cluster_properties: "ClusterProperties",
         process_coefficients_configuration: Optional["ProcessCoefficientsConfiguration"] = None,
         conditions: Optional["AmbientConditions"] = None,
+        enhancements: Optional[np.ndarray] = None,
     ):
         # validation
         if molecules is not clusters.molecules:
@@ -141,6 +147,7 @@ class SimulationSystem:
         self._molecules = molecules
         self._clusters = clusters
         self._cluster_properties = cluster_properties
+        self._enhancements = enhancements
         if process_coefficients_configuration is None:
             process_coefficients_configuration = ProcessCoefficientsConfiguration.from_config({})
         self._process_coefficients_configuration = process_coefficients_configuration
@@ -148,6 +155,7 @@ class SimulationSystem:
             conditions = AmbientConditions.from_cluster_properties(cluster_properties)
         self._conditions = conditions
         self.validate_energy_data()
+
         # Build reaction network
         self.process_coefficients = ProcessCoefficients(clusters, self.cluster_properties, self.process_coefficients_configuration)
         self.calculate_all_coefficients()
@@ -186,6 +194,16 @@ class SimulationSystem:
     def process_coefficients_configuration(self) -> ProcessCoefficientsConfiguration:
         """Get the process coefficients configuration."""
         return self._process_coefficients_configuration
+
+    @property
+    def enhancements(self) -> dict:
+        """Get the enhancement factor matrix."""
+        return self._enhancements
+
+    def set_enhancements(self, enhancements: dict) -> None:
+        """Set the enhancement factor matrix and update the process coefficients."""
+        self._enhancements = enhancements
+        self.calculate_all_coefficients()
 
     @classmethod
     def from_config(cls, config: Dict[str, Any]) -> "SimulationSystem":
@@ -254,6 +272,7 @@ class SimulationSystem:
             "conditions": self.conditions.to_config(),
             "cluster_properties": self.cluster_properties.to_config(),
             "process_coefficients_configuration": self.process_coefficients_configuration.to_config(),
+            "enhancements": self.enhancements.to_config(),
         }
 
     def validate_energy_data(self) -> None:
@@ -284,6 +303,7 @@ class SimulationSystem:
         self.process_coefficients.calculate_all_coefficients(
             temperature=self.conditions.temperature,
             partial_pressure_water=self.conditions.partial_pressure_water,
+            enhancements=self.enhancements,
         )
 
     def get_hydration_distribution(self, cluster_label: str) -> Dict[int, float]:
@@ -361,14 +381,14 @@ class SimulationSystem:
         self._cluster_properties.update_from_config(cluster_properties_config)
         self.validate_energy_data()
         logger.debug("Recalculating all coefficients with new cluster properties")
-        self.calculate_all_coefficients()
+        self.calculate_all_coefficients(enhancements=enhancements)
 
     def update_cluster_properties_and_conditions(self, cluster_properties_config: Dict[str, Any], conditions_config: Dict[str, Any]) -> None:
         """Update the cluster properties and conditions."""
         self._cluster_properties.update_from_config(cluster_properties_config)
         self.conditions.update_from_config(conditions_config)
         logger.debug("Recalculating all coefficients with new cluster properties and conditions")
-        self.calculate_all_coefficients()
+        self.calculate_all_coefficients(enhancements=enhancements)
 
     def get_cluster_info(self, cluster_index: int) -> Dict[str, Any]:
         """Get detailed information about a specific cluster."""
