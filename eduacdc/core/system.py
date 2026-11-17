@@ -5,10 +5,9 @@ ACDC system representation and management.
 import logging
 import math
 from dataclasses import dataclass
-from typing import Any, Dict, Optional, Set, Tuple
+from typing import Any, Dict, Optional, Set, Tuple, Union
 
 import numpy as np
-from numba.cuda.cudadrv import ndarray
 
 from ..core.cluster_properties import ClusterProperties, EnergyData
 from ..core.clusters import ClusterCollection, GenericIon
@@ -200,7 +199,7 @@ class SimulationSystem:
         """Get the enhancement factor matrix."""
         return self._enhancements
 
-    def set_enhancements(self, enhancements: dict) -> None:
+    def set_enhancements(self, enhancements: Union[dict, int, float]) -> None:
         """Set the enhancement factor matrix and update the process coefficients."""
         self._enhancements = enhancements
         self.calculate_all_coefficients()

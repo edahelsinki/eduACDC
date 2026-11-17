@@ -5,7 +5,7 @@ Process coefficient definitions and calculations for ACDC.
 import logging
 import math
 from dataclasses import dataclass
-from typing import Any, Dict, Optional, Set, Tuple
+from typing import Any, Dict, Optional, Set, Tuple, Union
 
 import numpy as np
 
@@ -73,7 +73,7 @@ class ProcessCoefficients:
         self,
         temperature: float,
         partial_pressure_water: float,
-        enhancements: Optional[dict] = None,
+        enhancements: Optional[Union[dict, int, float]] = None,
     ) -> None:
         """Build the complete reaction network."""
         # Calculate all coefficients
@@ -147,7 +147,7 @@ class ProcessCoefficients:
         c2_charge: int,
         temperature: float,
         hard_sphere_collision_rate: float,
-        enhancements: Optional[dict] = None,
+        enhancements: Optional[Union[dict, int, float]] = None,
     ) -> float:
         """Calculate the collision enhancement factor between two clusters using Su and Chesnavich, 1982
 
@@ -167,7 +167,7 @@ class ProcessCoefficients:
 
         # Hydrated clusters are removed from the normal collision calculation
         # so they should have the same collision coefficients as the dry ones
-        # NOTE: this code assumed there are less than 10 waters in the cluster
+        # NOTE: this code assumes there are less than 10 waters in the cluster
         if 'W' in c1_label:
             c1_label = c1_label[:-2]
 
@@ -175,10 +175,13 @@ class ProcessCoefficients:
             c2_label = c2_label[:-2]
 
         # if enhancements dict is supplied, return the unique enhancement factor
+        # if set as scalar, return that value
         # if not, return 1.0
         if c1_charge == 0 and c2_charge == 0:
             if enhancements is None:
                 return 1.0
+            elif isinstance(enhancements, (int, float)):
+                return enhancements
             else:
                 return enhancements[c1_label][c2_label]
         # if the ion collision method is constant, return the constant ion enhancement factor
