@@ -1,4 +1,4 @@
-"""Run a simple eduACDC outgrowth simulation."""
+"""Run an eduACDC outgrowth simulation."""
 import logging
 from pathlib import Path
 
@@ -18,6 +18,10 @@ logging.getLogger("eduacdc").setLevel(logging.INFO)
 # Paths relative to script location (run from project root: python examples/run_simulation.py)
 examples_dir = Path(__file__).resolve().parent
 config_path = examples_dir / "ADW.yaml"
+
+# Atmospheric conditions
+temperature = 225.0
+RH = 0.5
 
 # Load system and equations using InputParser
 parser = InputParser()
@@ -70,7 +74,8 @@ results = simulation.run_steady_state(
     initial_conditions,
     wall_loss_calculator=wall_loss_calculator,
     coagulation_loss_calculator=coagulation_loss,
-    relative_humidity=0.5,
+    temperature=temperature,
+    relative_humidity=RH,
 )
 
 # Output

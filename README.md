@@ -37,7 +37,7 @@ uv pip install -e .
 Or run without activating (uv handles the env):
 
 ```bash
-uv run python examples/run_simulation.py
+uv run python examples/run_simulation_full.py
 ```
 
 ## Usage
@@ -45,10 +45,10 @@ uv run python examples/run_simulation.py
 Run the example simulation:
 
 ```bash
-python examples/run_simulation.py
+python examples/run_simulation_full.py
 ```
 
-See [examples/run_simulation.py](examples/run_simulation.py) for a minimal workflow: loading a YAML config, creating a `Simulation`, and running steady-state outgrowth. Explore the `examples/` directory for more YAML system configuration files. For the YAML configuration format, see [eduacdc/README.md](eduacdc/README.md#yaml-configuration).
+See [examples/run_simulation_simple.py](examples/run_simulation.py) for a more minimal workflow: loading a YAML config, creating a `Simulation`, and running steady-state outgrowth. Explore the `examples/` directory for more YAML system configuration files. For the YAML configuration format, see [eduacdc/README.md](eduacdc/README.md#yaml-configuration).
 
 ## Code Layout
 

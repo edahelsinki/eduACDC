@@ -60,6 +60,10 @@ class EnergyData:
             enthalpy = parse_quantity(energy_spec[0], "kcal/mol", "J/particle")
             entropy = parse_quantity(energy_spec[1], "cal/(mol*K)", "J/(K*particle)")
             return cls(enthalpy=enthalpy, entropy=entropy, reference_temperature=reference_temperature)
+        elif isinstance(energy_spec, list) and len(energy_spec) == 1:
+            # Gibbs free energy
+            gibbs = parse_quantity(energy_spec[0], "kcal/mol", "J/particle")
+            return cls(gibbs_free_energy=gibbs, reference_temperature=reference_temperature)
         elif isinstance(energy_spec, (float, str)):
             # Gibbs free energy
             gibbs = parse_quantity(energy_spec, "kcal/mol", "J/particle")
