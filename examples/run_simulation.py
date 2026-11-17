@@ -24,12 +24,12 @@ parser = InputParser()
 system = parser.get_system_from_yaml(config_path)
 
 # Load enhancement factor values
-# If the file ids not present they default to 2
+# If the file ids not present they default to 1
 enhancement_file = "collision_rates_summary_sa_dma.txt"
 
 if Path(enhancement_file).exists():
     enhancement = {}
-    with open("collision_rates_summary_sa_dma.txt") as f:
+    with open(enhancement_file) as f:
         next(f)
         next(f)
 
@@ -70,6 +70,7 @@ results = simulation.run_steady_state(
     initial_conditions,
     wall_loss_calculator=wall_loss_calculator,
     coagulation_loss_calculator=coagulation_loss,
+    relative_humidity=0.5,
 )
 
 # Output
