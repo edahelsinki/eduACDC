@@ -48,7 +48,7 @@ Run the example simulation:
 python examples/run_simulation_full.py
 ```
 
-See [examples/run_simulation_simple.py](examples/run_simulation.py) for a more minimal workflow: loading a YAML config, creating a `Simulation`, and running steady-state outgrowth. Explore the `examples/` directory for more YAML system configuration files. For the YAML configuration format, see [eduacdc/README.md](eduacdc/README.md#yaml-configuration).
+See [examples/run_simulation_simple_simple.py](examples/run_simulation.py) for a more minimal workflow: loading a YAML config, creating a `Simulation`, and running steady-state outgrowth. Explore the `examples/` directory for more YAML system configuration files. For the YAML configuration format, see [eduacdc/README.md](eduacdc/README.md#yaml-configuration).
 
 ## Code Layout
 
