@@ -15,6 +15,6 @@ Run a simulation using any of these configs:
 python examples/run_simulation.py
 ```
 
-Edit `run_simulation.py` to change the config path (default is `ANW.yaml`).
+Edit `run_simulation.py` to change the config path (default is `AN_neutral_neg_pos.yaml`).
 
 For the YAML configuration format and schema, see [eduacdc/README.md](../eduacdc/README.md#yaml-configuration).
