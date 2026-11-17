@@ -1,4 +1,4 @@
-# Sulfuric acid + dimethylamine nucleation system
+# Sulfuric acid + ammonia nucleation system
 molecules:
   A:
     name: "sulfuric_acid"

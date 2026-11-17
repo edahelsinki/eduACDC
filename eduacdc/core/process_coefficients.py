@@ -178,7 +178,7 @@ class ProcessCoefficients:
         # if not, return 1.0
         if c1_charge == 0 and c2_charge == 0:
             if enhancements is None:
-                return 2.0
+                return 1.0
             else:
                 return enhancements[c1_label][c2_label]
         # if the ion collision method is constant, return the constant ion enhancement factor
