@@ -2,6 +2,8 @@
 
 YAML system configuration files for eduACDC simulations.
 
+New to eduACDC, Python or Jupyter? Start with the tutorial notebook [tutorial.ipynb](tutorial.ipynb); [TUTORIAL_SETUP.md](TUTORIAL_SETUP.md) explains how to run it in Google Colab or on your own computer.
+
 | File | Description |
 |------|-------------|
 | **ADW.yaml** | Sulfuric acid + dimethylamine (neutral only, with water) |
