@@ -49,7 +49,7 @@ Options: `include_generic_neg`, `include_generic_pos` (bool).
 
 - `reference_temperature`, `reference_pressure` (required)
 - `energies`: map of cluster label (e.g. `2A`, `1A1N`) to:
-  - Gibbs: single number or string (kcal/mol)
+    - Gibbs: single number, string (kcal/mol), or single element array `[gibbs_free_energy_kcal/mol]`
   - Enthalpy + entropy: `[enthalpy_kcal/mol, entropy_cal/(mol*K)]`
 - Optional: `dipole_moments`, `polarizabilities`, `water_symbol`, `disable_hydration_parsing`
 

@@ -421,6 +421,7 @@ class Simulation:
         coagulation_loss_calculator: CoagulationLossCalculator | None = None,
         relative_humidity: Optional[float] = None,
         temperature: Optional[float] = None,
+        enhancements: Optional[np.ndarray] = None,
     ) -> SimulationResults:
         """
         Find steady-state concentrations using SymPy equations.
@@ -438,6 +439,7 @@ class Simulation:
             coagulation_loss_calculator: Coagulation loss calculator. Defaults to constant 0.0.
             relative_humidity (Optional[float], optional): Relative humidity (0-1). If provided, updates system conditions.
             temperature (Optional[float], optional): Temperature in K. If provided, updates system conditions.
+            enhancements ...
         Returns:
             SimulationResults object with steady-state concentrations
         """
@@ -450,6 +452,8 @@ class Simulation:
             self.system.update_conditions(relative_humidity=relative_humidity)
         if temperature is not None:
             self.system.update_conditions(temperature=temperature)
+        if enhancements is not None:
+            self.system.update_conditions(enhancements=enhancements)
 
         n_clusters = self.system.n_clusters
         logger.debug(f"Number of clusters: {n_clusters}")

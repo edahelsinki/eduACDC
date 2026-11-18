@@ -1609,7 +1609,8 @@ class ClusterEquations:
                         + _fluxes[flux_direction_map[FluxDirection("boundary", "cluster")]][monomer_idx]
                         + _fluxes[flux_direction_map[FluxDirection("source", "cluster")]][monomer_idx]
                     )
-                    final_sources[monomer_idx] = from_monomer_flux - to_monomer_flux
+                    # the per-cluster flux arrays have shape (n_clusters, 1), so the sum is a 1-element array
+                    final_sources[monomer_idx] = np.asarray(from_monomer_flux - to_monomer_flux).item()
                     # if no input sources, set the source flux to the final source flux
                     if np.allclose(sources[monomer_idx], 0):
                         _fluxes[flux_direction_map[FluxDirection("source", "cluster")]][monomer_idx] = final_sources[monomer_idx]
